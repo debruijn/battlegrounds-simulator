@@ -1,12 +1,21 @@
-image: ubuntu:18.04
+before_script:
+   - apt-get update -qy
+   - apt-get install -y python3-dev python3-pip
 
 stages:
-  - test
+  - test_1804
+  - test_2004
 
-test:
-  stage: test
+test_1804:
+  stage: test_1804
+  image: ubuntu:18.04
   script:
-  - apt-get update -qy
-  - apt-get install -y python3-dev python3-pip
+  - pip3 install -r requirements.txt
+  - python3 test.py
+
+test_2004:
+  stage: test_1804
+  image: ubuntu:20.04
+  script:
   - pip3 install -r requirements.txt
   - python3 test.py

@@ -1,0 +1,40 @@
+Design of Battlegrounds Simulator:
+
+Object 'Round', containing two 'Players' and an indicator for which 'Player' attacks next
+Object 'Player', containing health, tavern level and up to 7 'Minions' and an indicator for which 'Minion' attacks next
+Object 'Minion', containing attack, health, a list of deathrattles, a list of tribes, and flags for taunt, poisonous, windfury, divine shield
+
+Methods:
+round.start() -> choose player to start, and let it attack, and keep going until 1 player is dead
+round.dealdamage()
+
+player.attack() -> let a minion attack 
+player.nextMinion() -> mark next minion to attack
+minion.attack() -> find a minion to attack, and deal the damage (or remove divine shield, etc)
+minion.resolveDeath() -> done when a minion dies
+
+Constructors:
+Minion('Junkbot')
+Minion('Golden Junkbot')
+Minion(list_of_base_minions_to_combine)
+
+Run-function:
+- Loop over same field R times
+- Impact of leaving a minion out
+- Impact of ordering
+- Impact of divine shield (or having Nef used against you)
+
+Test:
+- Fully deterministic tests, to see if stuff breaks
+- Stochastic tests, to find if same proportion of time things win
+
+
+Initial steps:
+- Simple minions
+- Work on flow and performance
+- Make basic tests
+- Add basic and common minion properties first (taunt, divine shield, poisonous)
+
+
+Later on:
+- When adding new minions, will sometimes have to add stuff elsewhere. Example: Kanchor's Smith needs to have a list of first mechs to die added.

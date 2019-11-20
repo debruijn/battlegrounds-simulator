@@ -6,6 +6,7 @@ class Player:
 
     def __init__(self):
         self.minions = []
+        self.dead_minions = []
         self.opponent = 0
 
     def set_opponent(self, opponent):
@@ -16,6 +17,13 @@ class Player:
 
     def add_minion(self, minion):
         self.minions.append(minion)
+
+    def set_dead(self, minion):
+        self.minions.pop(self.minions.index(minion))
+        self.dead_minions.append(minion)
+
+    def check_alive(self):
+        return len(self.minions) > 0
 
     def get_defender(self):
         return random.choice(self.minions)

@@ -1,18 +1,32 @@
+import random
+
 
 class Minion:
 
-    def __init__(self, player, attack=1, health=1):
+    def __init__(self, player, attack=1, health=1, name=None):
         self.attack = attack
         self.health = health
         self.player = player
+        if name is None:
+            self.name = random.random()
+        else:
+            self.name = name
+        print(f'Minion {self.name} with stats {self.attack},{self.health} created.')
 
     def find_target(self):
-        return self.player.get_opponent().get_defender()  # TODO: make it randomly generate 1
+        return self.player.get_opponent().get_defender()
+
+    def take_damage(self, damage):
+        self.health -= damage
+        if self.health <= 0:
+            self.player.set_dead(self)
+            print(f'Minion {self.name} has died!')
 
     def do_attack(self, minion):
-        self.health -= minion.attack
-        minion.health -= self.attack
-        print(f'This minion has {self.health} health remaining. Opponent has {minion.health} health remaining.')
+        self.take_damage(minion.attack)
+        minion.take_damage(self.attack)
+        print(f'Minion {self.name} has {self.health} health remaining. '
+              f'Opponent {minion.name} has {minion.health} health remaining.')
 
     def combat(self):
         target = self.find_target()

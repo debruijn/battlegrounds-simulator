@@ -1,10 +1,15 @@
 Design of Battlegrounds Simulator:
 
+Object 'Run', creating configs for 'Rounds' to run a number of times
 Object 'Round', containing two 'Players' and an indicator for which 'Player' attacks next
 Object 'Player', containing health, tavern level and up to 7 'Minions' and an indicator for which 'Minion' attacks next
 Object 'Minion', containing attack, health, a list of deathrattles, a list of tribes, and flags for taunt, poisonous, windfury, divine shield
 
 Methods:
+run.addMinion(minion, player) -> add a minion to a player
+run.doRound() -> run a round
+run.start() -> do a number of rounds
+
 round.start() -> choose player to start, and let it attack, and keep going until 1 player is dead
 round.dealdamage()
 

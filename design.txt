@@ -43,3 +43,4 @@ Initial steps:
 
 Later on:
 - When adding new minions, will sometimes have to add stuff elsewhere. Example: Kanchor's Smith needs to have a list of first mechs to die added.
+- Parallel running of rounds

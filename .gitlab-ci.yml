@@ -4,26 +4,10 @@ before_script:
 
 stages:
   - test
-  - test
-  - test
 
-test_1804:
+test:
   stage: test
-  image: ubuntu:18.04
-  script:
-  - pip3 install -r requirements.txt
-  - python3 test.py
-
-test_2004:
-  stage: test
-  image: ubuntu:20.04
-  script:
-  - pip3 install -r requirements.txt
-  - python3 test.py
-
-test_buster:
-  stage: test
-  image: python:3.8-buster
+  image: python:3.6-buster
   script:
   - pip3 install -r requirements.txt
   - python3 test.py

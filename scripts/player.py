@@ -1,6 +1,9 @@
 import random
 from scripts.minion import Minion
 
+# Todo: add hero power effects at beginning of round for specific types of Players (Ragnaros, Lich King, etc)
+# Todo: add check for player-broad effects (Baron Rivendare, Malganis)
+
 
 class Player:
 
@@ -21,15 +24,20 @@ class Player:
     def set_dead(self, minion):
         self.minions.pop(self.minions.index(minion))
         self.dead_minions.append(minion)
+        # Todo: also add dead minion to dead minions in the round
+        # Todo: trigger on-death effects
 
     def check_alive(self):
         return len(self.minions) > 0
 
     def get_defender(self):
-        return random.choice(self.minions)
+        return random.choice(self.minions)  # Todo: add check for taunt minions; if so, select from them
+
+    def get_lowest_attack_defender(self):
+        return random.choice(self.minions)  # Todo: return (1 of the) minions with lowest attack
 
     def get_attacker(self):
-        return random.choice(self.minions)
+        return random.choice(self.minions)  # Todo: implement an order in attacking from left to right
 
     def do_attack(self):
         minion = self.get_attacker()

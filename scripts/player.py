@@ -14,6 +14,7 @@ class Player:
         self.health = health
         self.tavern_level = tavern_level
         self.next_attacker = 0
+        self.max_minions = 7
 
     def set_opponent(self, opponent):
         self.opponent = opponent
@@ -22,7 +23,8 @@ class Player:
         return self.opponent
 
     def add_minion(self, minion):
-        self.minions.append(minion)
+        if len(self.minions) < self.max_minions:
+            self.minions.append(minion)
 
     def set_dead(self, minion):
         dead_index = self.minions.index(minion)

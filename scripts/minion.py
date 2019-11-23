@@ -3,7 +3,7 @@ import random
 
 class Minion:
 
-    def __init__(self, player, attack=1, health=1, name=None, stars=1, mana=1):
+    def __init__(self, player=None, attack=1, health=1, name=None, stars=1, mana=1):
         self.attack = attack
         self.health = health
         self.player = player
@@ -16,10 +16,13 @@ class Minion:
         self.windfury = False
         self.poisonous = False
         self.swipe = False
+        self.dead = False
         if name is None:
             self.name = random.random()
         else:
             self.name = name
+        if self.player is not None:
+            player.add_minion(self)
 
     def find_target(self):
         return self.player.get_opponent().get_defender(self.swipe)  # Todo: overwrite in case attacker is Zapp
@@ -33,6 +36,7 @@ class Minion:
                 self.health = 0
             if self.health <= 0:
                 self.player.set_dead(self)
+                self.dead = True
                 # Todo: add deathrattles
 
     def do_attack(self, minion):

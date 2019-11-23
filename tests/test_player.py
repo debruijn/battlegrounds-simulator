@@ -39,7 +39,8 @@ class MyTestCase(unittest.TestCase):
         player1 = Player()
         m1 = Minion(player1)
         player1.set_dead(m1)
-        self.assertEqual(player1.minions[0], m1)
+        self.assertEqual(player1.dead_minions[0], m1)
+        self.assertFalse(player1.check_alive())
 
     def test_error_set_other_players_minion_dead(self):
         player1 = Player()

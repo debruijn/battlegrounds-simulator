@@ -7,14 +7,14 @@ unittest_minion:
   image: python:3.6-buster
   script:
   - pip3 install -r requirements.txt
-  - nosetests tests/test_minion.py
+  - nosetests -v tests/test_minion.py
 
 unittest_player:
   stage: unittests
   image: python:3.6-buster
   script:
   - pip3 install -r requirements.txt
-  - nosetests tests/test_player.py
+  - nosetests -v tests/test_player.py
 
 main:
   stage: main

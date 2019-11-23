@@ -7,10 +7,12 @@ from scripts.minion import Minion
 
 class Player:
 
-    def __init__(self):
+    def __init__(self, health=40, tavern_level=1):
         self.minions = []
         self.dead_minions = []
         self.opponent = 0
+        self.health = health
+        self.tavern_level = tavern_level
 
     def set_opponent(self, opponent):
         self.opponent = opponent

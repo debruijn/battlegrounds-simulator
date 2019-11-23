@@ -1,7 +1,3 @@
-before_script:
-   - apt-get update -qy
-   - apt-get install -y python3-dev python3-pip
-
 stages:
   - unittests
   - main
@@ -11,14 +7,14 @@ unittest_minion:
   image: python:3.6-buster
   script:
   - pip3 install -r requirements.txt
-  - nose tests/test_minion.py
+  - nosetests tests/test_minion.py
 
 unittest_player:
   stage: unittests
   image: python:3.6-buster
   script:
   - pip3 install -r requirements.txt
-  - nose tests/test_player.py
+  - nosetests tests/test_player.py
 
 main:
   stage: main

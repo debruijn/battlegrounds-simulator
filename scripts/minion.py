@@ -11,6 +11,11 @@ class Minion:
         self.mana = mana
         self.buff_attack = 0  # Todo: implement attack and health buffs into combat
         self.buff_health = 0
+        self.taunt = False
+        self.divine_shield = False
+        self.windfury = False
+        self.poisonous = False
+        self.swipe
         if name is None:
             self.name = random.random()
         else:
@@ -18,24 +23,37 @@ class Minion:
         #print(f'Minion {self.name} with stats {self.attack},{self.health} created.')
 
     def find_target(self):
-        return self.player.get_opponent().get_defender()  # Todo: overwrite in case attacker is Zapp
+        return self.player.get_opponent().get_defender(self.swipe)  # Todo: overwrite in case attacker is Zapp
 
-    def take_damage(self, damage):  # Todo: implement poisonous, divine shield
-        self.health -= damage
-        if self.health <= 0:
-            self.player.set_dead(self)
-            # Todo: add deathrattles
-        #    print(f'Minion {self.name} has died!')
+    def take_damage(self, damage, poisonous):  # Todo: implement poisonous, divine shield
+        if self.divine_shield:
+            self.divine_shield = False  # TODO: add trigger for "on removal of divine shield"
+        else:
+            self.health -= damage
+            if self.health > 0 and poisonous:
+                self.health = 0
+            if self.health <= 0:
+                self.player.set_dead(self)
+                # Todo: add deathrattles
+            #    print(f'Minion {self.name} has died!')
 
     def do_attack(self, minion):
-        self.take_damage(minion.attack)
-        minion.take_damage(self.attack)
-        #print(f'Minion {self.name} has {self.health} health remaining. '
+        if isinstance(minion, list):  # List returned in case of swipe attack
+            minions = minion
+            minion = minions.pop(0)
+        self.take_damage(minion.attack, minion.poisonous)
+        minion.take_damage(self.attack, self.poisonous)
+        for other_minions in minions:  # Swipe damage
+            other_minions.take_damage(self.attack, self.poisonous)
+        # print(f'Minion {self.name} has {self.health} health remaining. '
         #      f'Opponent {minion.name} has {minion.health} health remaining.')
 
     def combat(self):  # Todo: implement windfury, swipe
         target = self.find_target()
         self.do_attack(target)
+        if self.windfury and self.health>0:
+            target = self.find_target()
+            self.do_attack(target)
 
 
 if __name__ == '__main__':

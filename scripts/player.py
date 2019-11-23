@@ -36,8 +36,21 @@ class Player:
     def check_alive(self):
         return len(self.minions) > 0
 
-    def get_defender(self):
-        return random.choice(self.minions)  # Todo: add check for taunt minions; if so, select from them
+    def get_defender(self, swipe=False):
+        if swipe and (len(self.minions) > 1):
+            defender_index = random.randint(0, len(self.minions))
+            if defender_index == 0:
+                defender = [self.minions[defender_index], self.minions[defender_index + 1]]
+            elif defender_index == len(self.minions) - 1:
+                defender = [self.minions[defender_index], self.minions[defender_index - 1]]
+            else:
+                defender = [self.minions[defender_index], self.minions[defender_index - 1],
+                            self.minions[defender_index + 1]]
+
+        else:
+            defender = random.choice(self.minions)
+
+        return defender  # Todo: add check for taunt minions; if so, select from them
 
     def get_lowest_attack_defender(self):
         return random.choice(self.minions)  # Todo: return (1 of the) minions with lowest attack

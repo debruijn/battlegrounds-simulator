@@ -44,7 +44,7 @@ class Minion:
         self.take_damage(minion.attack, minion.poisonous)
         minion.take_damage(self.attack, self.poisonous)
 
-    def combat(self):
+    def do_combat(self):
         target = self.find_target()
         self.do_attack(target)
         if self.windfury and self.health>0:

@@ -67,7 +67,7 @@ class Player:
 
     def do_attack(self):
         minion = self.get_attacker()
-        minion.combat()
+        minion.do_combat()
 
 
 if __name__ == "__main__":

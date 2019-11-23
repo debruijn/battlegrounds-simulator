@@ -13,6 +13,7 @@ class Player:
         self.opponent = 0
         self.health = health
         self.tavern_level = tavern_level
+        self.next_attacker = 0
 
     def set_opponent(self, opponent):
         self.opponent = opponent
@@ -24,7 +25,10 @@ class Player:
         self.minions.append(minion)
 
     def set_dead(self, minion):
-        self.minions.pop(self.minions.index(minion))
+        dead_index = self.minions.index(minion)
+        self.minions.pop(dead_index)
+        if dead_index <= self.next_attacker:
+            self.next_attacker -= 1
         self.dead_minions.append(minion)
         # Todo: also add dead minion to dead minions in the round
         # Todo: trigger on-death effects
@@ -38,8 +42,15 @@ class Player:
     def get_lowest_attack_defender(self):
         return random.choice(self.minions)  # Todo: return (1 of the) minions with lowest attack
 
+    def update_attacker(self):
+        self.next_attacker += 1
+        if self.next_attacker >= len(self.minions):
+            self.next_attacker = 0
+
     def get_attacker(self):
-        return random.choice(self.minions)  # Todo: implement an order in attacking from left to right
+        attacker = self.minions[self.next_attacker]
+        self.update_attacker()
+        return attacker
 
     def do_attack(self):
         minion = self.get_attacker()

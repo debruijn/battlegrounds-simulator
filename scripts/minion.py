@@ -15,17 +15,16 @@ class Minion:
         self.divine_shield = False
         self.windfury = False
         self.poisonous = False
-        self.swipe
+        self.swipe = False
         if name is None:
             self.name = random.random()
         else:
             self.name = name
-        #print(f'Minion {self.name} with stats {self.attack},{self.health} created.')
 
     def find_target(self):
         return self.player.get_opponent().get_defender(self.swipe)  # Todo: overwrite in case attacker is Zapp
 
-    def take_damage(self, damage, poisonous):  # Todo: implement poisonous, divine shield
+    def take_damage(self, damage, poisonous):
         if self.divine_shield:
             self.divine_shield = False  # TODO: add trigger for "on removal of divine shield"
         else:
@@ -35,20 +34,17 @@ class Minion:
             if self.health <= 0:
                 self.player.set_dead(self)
                 # Todo: add deathrattles
-            #    print(f'Minion {self.name} has died!')
 
     def do_attack(self, minion):
         if isinstance(minion, list):  # List returned in case of swipe attack
             minions = minion
             minion = minions.pop(0)
+            for other_minions in minions:  # Swipe damage
+                other_minions.take_damage(self.attack, self.poisonous)  # Todo: check order of swipe effects
         self.take_damage(minion.attack, minion.poisonous)
         minion.take_damage(self.attack, self.poisonous)
-        for other_minions in minions:  # Swipe damage
-            other_minions.take_damage(self.attack, self.poisonous)
-        # print(f'Minion {self.name} has {self.health} health remaining. '
-        #      f'Opponent {minion.name} has {minion.health} health remaining.')
 
-    def combat(self):  # Todo: implement windfury, swipe
+    def combat(self):
         target = self.find_target()
         self.do_attack(target)
         if self.windfury and self.health>0:

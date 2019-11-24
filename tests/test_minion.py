@@ -3,7 +3,7 @@ from scripts.minion import Minion
 from scripts.player import Player
 
 
-class MyTestCase(unittest.TestCase):
+class TestMinions(unittest.TestCase):
 
     def test_attack(self):
         m1 = Minion(attack=4, health=3)

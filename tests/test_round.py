@@ -4,7 +4,7 @@ from scripts.player import Player
 from scripts.round import Round
 
 
-class MyTestCase(unittest.TestCase):
+class TestRounds(unittest.TestCase):
 
     def test_set_players_as_opponents(self):
         player1 = Player(minion=Minion())

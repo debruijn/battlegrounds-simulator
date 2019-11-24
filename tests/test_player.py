@@ -66,17 +66,47 @@ class TestPlayers(unittest.TestCase):
         m1 = Minion(player1)
         self.assertEqual(player1.get_defender(), m1)
 
-#    def test_get_defender_swipe(self):  # TODO add back when taunt is in
-#        player1 = Player()
-#        minions = [Minion(player1) for __i in range(3)]
-#        self.assertEqual(player1.get_defender(swipe=True), minions)
-    # TODO: change order to reflect middle minion first
+    def test_taunt_minions(self):
+        player1 = Player()
+        minions = [Minion(player1) for __i in range(7)]
+        minions[1].taunt = True
+        minions[3].taunt = True
+        minions[6].taunt = True
+        taunt_minions = player1.get_taunt_minions()
+        self.assertEqual(len(taunt_minions), 3)
+        self.assertListEqual(taunt_minions, [minions[1], minions[3], minions[6]])
 
-    # def test_get_defender_swipe_side(self):  # TODO add back when taunt is in
-        # player1 = Player()
-        # minions = [Minion(player1) for __i in range(3)]
-        # self.assertEqual(player1.get_defender(swipe=True), minions)
-    #   TODO: change order to reflect middle minion first
+    def test_get_defender_with_taunt(self):
+        player1 = Player()
+        minions = [Minion(player1) for __i in range(7)]
+        minions[1].taunt = True
+        self.assertEqual(player1.get_defender(), minions[1])
+
+    def test_get_defender_with_multiple_taunt(self):
+        player1 = Player()
+        minions = [Minion(player1) for __i in range(7)]
+        minions[1].taunt = True
+        minions[3].taunt = True
+        minions[6].taunt = True
+        self.assertTrue(player1.get_defender().taunt)
+
+    def test_get_defender_swipe(self):
+        player1 = Player()
+        minions = [Minion(player1) for __i in range(3)]
+        minions[1].taunt = True
+        self.assertListEqual(player1.get_defender(swipe=True), [minions[1], minions[0], minions[2]])
+
+    def test_get_defender_swipe_side(self):
+        player1 = Player()
+        minions = [Minion(player1) for __i in range(3)]
+        minions[0].taunt = True
+        self.assertListEqual(player1.get_defender(swipe=True), minions[0:2])
+
+    def test_get_defender_swipe_side_alternative(self):
+        player1 = Player()
+        minions = [Minion(player1) for __i in range(3)]
+        minions[2].taunt = True
+        self.assertListEqual(player1.get_defender(swipe=True), [minions[2], minions[1]])
 
     def test_get_defender_swipe_single_minion(self):
         player1 = Player()

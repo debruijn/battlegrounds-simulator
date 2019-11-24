@@ -46,9 +46,17 @@ class Player:
     def check_alive(self):
         return len(self.minions) > 0
 
+    def get_taunt_minions(self):
+        return [minion for minion in self.minions if minion.taunt]
+
     def get_defender(self, swipe=False):
+        taunt_minions = self.get_taunt_minions()
         if swipe and (len(self.minions) > 1):
-            defender_index = random.randint(0, len(self.minions))
+            if len(taunt_minions) > 0:
+                taunt_index = random.randint(0, len(taunt_minions) - 1)
+                defender_index = self.minions.index(taunt_minions[taunt_index])
+            else:
+                defender_index = random.randint(0, len(self.minions) - 1)
             if defender_index == 0:
                 defender = [self.minions[defender_index], self.minions[defender_index + 1]]
             elif defender_index == len(self.minions) - 1:
@@ -56,9 +64,11 @@ class Player:
             else:
                 defender = [self.minions[defender_index], self.minions[defender_index - 1],
                             self.minions[defender_index + 1]]
-
         else:
-            defender = random.choice(self.minions)
+            if len(taunt_minions) == 0:
+                defender = random.choice(self.minions)
+            else:
+                defender = random.choice(taunt_minions)
 
         return defender  # Todo: add check for taunt minions; if so, select from them
 

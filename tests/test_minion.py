@@ -132,39 +132,39 @@ class TestMinions(unittest.TestCase):
 
         self.assertEqual(m1.find_target(), m2)
 
-    # def test_get_target_swipe(self):  TODO: add this back when taunt works
-    #     player1 = Player()
-    #     player2 = Player()
-    #     player1.set_opponent(player2)
-    #     player2.set_opponent(player1)
-    #
-    #     defender1 = Minion(player2, attack=1, health=2)
-    #     defender2 = Minion(player2, attack=0, health=3)
-    #     defender2.taunt = True
-    #     defender3 = Minion(player2, attack=0, health=4)
-    #
-    #     defenders = [defender2, defender1, defender3]
-    #     attacker = Minion(player1, attack=1, health=2)
-    #     attacker.swipe = True
-    #
-    #     self.assertListEqual(attacker.find_target(), defenders)
+    def test_get_target_swipe(self):
+        player1 = Player()
+        player2 = Player()
+        player1.set_opponent(player2)
+        player2.set_opponent(player1)
 
-    # def test_get_target_side_swipe_due_to_taunt(self):  TODO: add this back when taunt works
-    #     player1 = Player()
-    #     player2 = Player()
-    #     player1.set_opponent(player2)
-    #     player2.set_opponent(player1)
-    #
-    #     defender1 = Minion(player2, attack=1, health=2)
-    #     defender1.taunt = True
-    #     defender2 = Minion(player2, attack=0, health=3)
-    #     defender3 = Minion(player2, attack=0, health=4)
-    #
-    #     defenders = [defender1, defender2]
-    #     attacker = Minion(player1, attack=1, health=2)
-    #     attacker.swipe = True
-    #
-    #     self.assertListEqual(attacker.find_target(), defenders)
+        defender1 = Minion(player2, attack=1, health=2)
+        defender2 = Minion(player2, attack=0, health=3)
+        defender2.taunt = True
+        defender3 = Minion(player2, attack=0, health=4)
+
+        defenders = [defender2, defender1, defender3]
+        attacker = Minion(player1, attack=1, health=2)
+        attacker.swipe = True
+
+        self.assertListEqual(attacker.find_target(), defenders)
+
+    def test_get_target_side_swipe_due_to_taunt(self):
+        player1 = Player()
+        player2 = Player()
+        player1.set_opponent(player2)
+        player2.set_opponent(player1)
+
+        defender1 = Minion(player2, attack=1, health=2)
+        defender1.taunt = True
+        defender2 = Minion(player2, attack=0, health=3)
+        Minion(player2, attack=0, health=4)
+
+        defenders = [defender1, defender2]
+        attacker = Minion(player1, attack=1, health=2)
+        attacker.swipe = True
+
+        self.assertListEqual(attacker.find_target(), defenders)
 
     def test_windfury(self):
         player1 = Player()

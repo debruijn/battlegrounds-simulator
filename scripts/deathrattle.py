@@ -36,11 +36,35 @@ class SummonDeathrattle(Deathrattle):
         [self.minion_type(player) for __i in range(self.summon_count)]
 
 
+class SummonDeathrattleRatPack(Deathrattle):
+
+    def __init__(self, minion=None, minion_type=Minion):
+        self.minion_type = minion_type
+        super().__init__(minion)
+
+    def trigger(self):
+        player = self.minion.player
+        [self.minion_type(player) for __i in range(self.minion.attack)]
+
+
+class SummonRandomDeathrattle(Deathrattle):
+
+    def __init__(self, minion=None, minion_types=[Minion], summon_count=1):
+        self.minion_types = minion_types
+        self.summon_count = summon_count
+        super().__init__(minion)
+
+    def trigger(self):
+        player = self.minion.player
+        [random.choice(self.minion_types)(player) for __i in range(self.summon_count)]
+
+
 class DivineShieldDeathrattle(Deathrattle):
 
     def trigger(self):
         player = self.minion.player
-        random.choice(player.minions).divine_shield = True
+        if len(player.minions)>0:
+            random.choice(player.minions).divine_shield = True
 
 
 class BuffDeathrattle(Deathrattle):

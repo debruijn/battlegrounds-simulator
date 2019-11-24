@@ -132,13 +132,26 @@ class TestDeathrattles(unittest.TestCase):
 
         minion1 = Minion(player1, attack=4, health=3)
         minion2 = Minion(player1, attack=4, health=3)
-        DamageDeathrattle(minion1, damage=2)
+        DivineShieldDeathrattle(minion1)
 
         defender = Minion(player2, attack=3, health=6)
-        DamageDeathrattle(defender, damage=2)
 
         minion1.do_attack(defender)
-        self.assertEqual(minion2.health, 1)
+        self.assertTrue(minion2.divine_shield)
+
+    def test_divineshield_deathrattle_empty_board(self):
+        player1 = Player()
+        player2 = Player()
+        player1.set_opponent(player2)
+        player2.set_opponent(player1)
+
+        minion = Minion(player1, attack=4, health=3)
+        DivineShieldDeathrattle(minion)
+
+        defender = Minion(player2, attack=3, health=6)
+
+        minion.do_attack(defender)
+        self.assertFalse(defender.divine_shield)
 
     def test_buff_deathrattle_one_minion(self):
         player1 = Player()

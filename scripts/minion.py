@@ -11,6 +11,7 @@ class Minion:
         self.mana = mana
         self.buff_attack = 0  # Todo: implement attack and health buffs into combat
         self.buff_health = 0
+        self.tribe = None
         self.taunt = False
         self.divine_shield = False
         self.windfury = False
@@ -18,6 +19,7 @@ class Minion:
         self.swipe = False
         self.dead = False
         self.deathrattle = []
+        self.random_summon = True
         if name is None:
             self.name = random.random()
         else:
@@ -41,7 +43,7 @@ class Minion:
         if self.divine_shield:
             self.divine_shield = False  # TODO: add trigger for "on removal of divine shield"
         else:
-            self.health -= damage
+            self.health -= damage  # TODO: add trigger for "on taking damage"
             if self.health > 0 and poisonous:  # TODO: add check for zero attack/poison combo
                 self.health = 0
             if self.health <= 0:

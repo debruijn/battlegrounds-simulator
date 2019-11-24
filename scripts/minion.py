@@ -24,6 +24,9 @@ class Minion:
         if self.player is not None:
             player.add_minion(self)
 
+    def set_player(self, player):
+        self.player = player
+
     def find_target(self):
         return self.player.get_opponent().get_defender(self.swipe)  # Todo: overwrite in case attacker is Zapp
 

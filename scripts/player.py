@@ -7,7 +7,7 @@ from scripts.minion import Minion
 
 class Player:
 
-    def __init__(self, health=40, tavern_level=1):
+    def __init__(self, health=40, tavern_level=1, minion=None, minions=None):
         self.minions = []
         self.dead_minions = []
         self.opponent = 0
@@ -15,6 +15,12 @@ class Player:
         self.tavern_level = tavern_level
         self.next_attacker = 0
         self.max_minions = 7
+        if minions is not None:
+            [self.add_minion(minion) for minion in minions]
+            [minion.set_player(self) for minion in minions]
+        elif minion is not None:
+            self.add_minion(minion)
+            minion.set_player(self)
 
     def set_opponent(self, opponent):
         self.opponent = opponent
@@ -29,8 +35,10 @@ class Player:
     def set_dead(self, minion):
         dead_index = self.minions.index(minion)
         self.minions.pop(dead_index)
-        if dead_index <= self.next_attacker:
+        if dead_index < self.next_attacker:
             self.next_attacker -= 1
+        if dead_index >= len(self.minions):
+            self.next_attacker = 0
         self.dead_minions.append(minion)
         # Todo: also add dead minion to dead minions in the round
         # Todo: trigger on-death effects
@@ -64,12 +72,12 @@ class Player:
 
     def get_attacker(self):
         attacker = self.minions[self.next_attacker]
-        self.update_attacker()
         return attacker
 
     def do_attack(self):
         minion = self.get_attacker()
         minion.do_combat()
+        self.update_attacker()
 
 
 if __name__ == "__main__":

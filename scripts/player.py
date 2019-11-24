@@ -49,10 +49,10 @@ class Player:
     def get_taunt_minions(self):
         return [minion for minion in self.minions if minion.taunt]
 
-    def get_defender(self, swipe=False):
+    def get_defender(self, swipe=False, ignore_taunt=False):
         taunt_minions = self.get_taunt_minions()
         if swipe and (len(self.minions) > 1):
-            if len(taunt_minions) > 0:
+            if len(taunt_minions) > 0 and not ignore_taunt:
                 taunt_index = random.randint(0, len(taunt_minions) - 1)
                 defender_index = self.minions.index(taunt_minions[taunt_index])
             else:
@@ -65,7 +65,7 @@ class Player:
                 defender = [self.minions[defender_index], self.minions[defender_index - 1],
                             self.minions[defender_index + 1]]
         else:
-            if len(taunt_minions) == 0:
+            if len(taunt_minions) == 0 or ignore_taunt:
                 defender = random.choice(self.minions)
             else:
                 defender = random.choice(taunt_minions)

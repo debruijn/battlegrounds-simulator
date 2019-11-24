@@ -17,6 +17,7 @@ class Minion:
         self.poisonous = False
         self.swipe = False
         self.dead = False
+        self.deathrattle = []
         if name is None:
             self.name = random.random()
         else:
@@ -27,20 +28,27 @@ class Minion:
     def set_player(self, player):
         self.player = player
 
+    def add_deathrattle(self, deathrattle):
+        self.deathrattle.append(deathrattle)
+
+    def trigger_deathrattles(self):
+        [deathrattle.trigger() for deathrattle in self.deathrattle]
+
     def find_target(self):
         return self.player.get_opponent().get_defender(self.swipe)  # Todo: overwrite in case attacker is Zapp
 
-    def take_damage(self, damage, poisonous):
+    def take_damage(self, damage, poisonous=False):
         if self.divine_shield:
             self.divine_shield = False  # TODO: add trigger for "on removal of divine shield"
         else:
             self.health -= damage
-            if self.health > 0 and poisonous:
+            if self.health > 0 and poisonous:  # TODO: add check for zero attack/poison combo
                 self.health = 0
             if self.health <= 0:
-                self.player.set_dead(self)
-                self.dead = True
-                # Todo: add deathrattles
+                if not self.dead:
+                    self.player.set_dead(self)
+                    self.dead = True
+                    self.trigger_deathrattles()  # TODO: make a deathrattle phase, so they trigger "simultaneously"
 
     def do_attack(self, minion):
         if isinstance(minion, list):  # List returned in case of swipe attack

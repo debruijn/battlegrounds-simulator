@@ -16,6 +16,13 @@ unittest_player:
   - pip3 install -r requirements.txt
   - nosetests -v tests/test_player.py
 
+unittest_round:
+  stage: unittests
+  image: python:3.6-buster
+  script:
+  - pip3 install -r requirements.txt
+  - nosetests -v tests/test_round.py
+
 main:
   stage: main
   image: python:3.6-buster

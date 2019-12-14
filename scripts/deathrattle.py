@@ -36,6 +36,20 @@ class SummonDeathrattle(Deathrattle):
         [self.minion_type(player) for __i in range(self.summon_count)]
 
 
+class SummonDeathrattleOpponent(SummonDeathrattle):
+
+    def trigger(self):
+        opponent = self.minion.player.opponent
+        [self.minion_type(opponent) for __i in range(self.summon_count)]
+
+
+class SummonDeathrattleReplicatingMenace(SummonDeathrattle):
+
+    def __init__(self, minion=None):
+        from scripts.minion_catalogue import Microbot
+        super().__init__(minion, minion_type=Microbot, summon_count=3)
+
+
 class SummonDeathrattleRatPack(Deathrattle):
 
     def __init__(self, minion=None, minion_type=Minion):
@@ -49,7 +63,7 @@ class SummonDeathrattleRatPack(Deathrattle):
 
 class SummonRandomDeathrattle(Deathrattle):
 
-    def __init__(self, minion=None, minion_types=[Minion], summon_count=1):
+    def __init__(self, minion=None, minion_types=None, summon_count=1):
         self.minion_types = minion_types
         self.summon_count = summon_count
         super().__init__(minion)
@@ -63,7 +77,7 @@ class DivineShieldDeathrattle(Deathrattle):
 
     def trigger(self):
         player = self.minion.player
-        if len(player.minions)>0:
+        if len(player.minions) > 0:
             random.choice(player.minions).divine_shield = True
 
 
@@ -84,13 +98,28 @@ class BuffDeathrattle(Deathrattle):
         minion.attack += self.buff_attack
         minion.health += self.buff_health
 
+    def get_feasible_minions(self, player):
+        return player.minions
+
     def trigger(self):
         player = self.minion.player
+        minions = self.get_feasible_minions(player)
         if self.distinct:
-            buff_index = random.sample(range(len(player.minions)), k=np.min([len(player.minions), self.buff_count]))
+            buff_index = random.sample(range(len(minions)), k=np.min([len(minions), self.buff_count]))
         else:
-            buff_index = random.choices(range(len(player.minions)), k=self.buff_count)
-        [self.apply_buff(player.minions[i]) for i in buff_index]
+            buff_index = random.choices(range(len(minions)), k=self.buff_count)
+        [self.apply_buff(minions[i]) for i in buff_index]
+
+
+class BuffDeathrattleTribe(BuffDeathrattle):
+
+    def __init__(self, minion=None, buff_attack=1, buff_health=1, buff_count=1, tribe="Beast", distinct=True):
+        self.tribe = tribe
+        super().__init__(minion, buff_attack, buff_health, buff_count, distinct)
+
+    def get_feasible_minions(self, player):
+        minions = [m for m in player.minions if m.tribe == self.tribe]
+        return minions
 
 
 if __name__ == '__main__':
@@ -99,13 +128,13 @@ if __name__ == '__main__':
 
     player1 = Player()
     player2 = Player()
-    minion = Minion(player1, attack=4, health=3)
-    deathrattle = DamageDeathrattle(minion, damage=2)
+    minion1 = Minion(player1, attack=4, health=3)
+    deathrattle = DamageDeathrattle(minion1, damage=2)
     defender = Minion(player2, attack=1, health=5)
     player1.set_opponent(player2)
 
     print(defender.health)
-    minion.trigger_deathrattles()
+    minion1.trigger_deathrattles()
     print(defender.health)
 
     print(len(player2.minions))
@@ -116,7 +145,6 @@ if __name__ == '__main__':
     print(len(player2.minions))
     defender.trigger_deathrattles()
     print(len(player2.minions))
-    minion.do_attack(defender)
+    minion1.do_attack(defender)
     print(len(player2.minions))
     print(player2.minions)
-
